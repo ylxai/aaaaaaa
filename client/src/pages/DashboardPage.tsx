@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api';
+import './DashboardPage.css';
 
 interface Event {
   id: number;
@@ -42,7 +43,7 @@ const DeleteModal = ({ isOpen, onClose, onConfirm, eventName, isDeleting }: Dele
           >
             {isDeleting ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                <div className="spinner rounded-full h-4 w-4 border-b-2 border-white mr-2" />
                 Menghapus...
               </>
             ) : (
@@ -72,7 +73,9 @@ const DashboardPage = () => {
     eventName: '',
   });
   const [isDeleting, setIsDeleting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);useEffect(() => {
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  
+  useEffect(() => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
@@ -88,17 +91,16 @@ const DashboardPage = () => {
     };
 
     fetchEvents();
-  }, []);
-
-  // Clear success message after 5 seconds
+  }, []);// Clear success/error messages after 5 seconds
   useEffect(() => {
-    if (successMessage) {
+    if (successMessage || error) {
       const timer = setTimeout(() => {
-        setSuccessMessage(null);
+        if (successMessage) setSuccessMessage(null);
+        if (error) setError(null);
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [successMessage]);
+  }, [successMessage, error]);
 
   const handleDeleteEvent = async () => {
     if (!deleteModal.eventId) return;
@@ -129,17 +131,56 @@ const DashboardPage = () => {
       eventId,
       eventName,
     });
-  };
-
-  const closeDeleteModal = () => {
+  };const closeDeleteModal = () => {
     if (!isDeleting) {
       setDeleteModal({ isOpen: false, eventId: null, eventName: '' });
     }
   };
-  const LoadingState = () => (
+  
+  // Export events to CSV
+  const exportToCSV = () => {
+    if (events.length === 0) {
+      setError('Tidak ada data acara untuk diekspor');
+      return;
+    }
+    
+    // Create CSV headers
+    const headers = ['ID', 'Nama Acara', 'Slug', 'Tanggal Acara'];
+    
+    // Convert events to CSV rows
+    const rows = events.map(event => [
+      event.id,
+      `"${event.name.replace(/"/g, '""')}"`, // Escape quotes in CSV
+      event.slug,
+      new Date(event.event_date).toLocaleDateString('id-ID')
+    ]);
+    
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+    
+    // Create a Blob and download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    // Set up download attributes
+    link.setAttribute('href', url);
+    link.setAttribute('download', `acara-${new Date().toISOString().slice(0, 10)}.csv`);
+    link.style.display = 'none';
+    
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    setSuccessMessage('Data acara berhasil diekspor ke CSV');
+  };const LoadingState = () => (
     <div className="flex items-center justify-center min-h-screen">
       <div className="p-8 rounded-lg bg-white shadow-lg">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto" />
+        <div className="spinner rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto" />
         <p className="mt-4 text-gray-600">Memuat dashboard...</p>
       </div>
     </div>
@@ -162,9 +203,9 @@ const DashboardPage = () => {
         </button>
       </div>
     </div>
-  );
-
-  const filteredEvents = useMemo(() => {
+  );const filteredEvents = useMemo(() => {
+    if (events.length === 0) return [];
+    
     return events
       .filter(event => 
         event.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -177,15 +218,41 @@ const DashboardPage = () => {
       });
   }, [events, searchTerm, sortBy]);
   if (loading) return <LoadingState />;
-  if (error) return <ErrorState message={error} />;return (
-    <div className="bg-gray-100 min-h-screen">
-      {/* Success Message */}
+  if (error) return <ErrorState message={error} />;
+  
+  return (
+    <div className="bg-gray-100 min-h-screen">{/* Status Messages */}
       {successMessage && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center">
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center animate-fade-in">
           <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
           {successMessage}
+          <button 
+            onClick={() => setSuccessMessage(null)}
+            className="ml-3 text-white opacity-70 hover:opacity-100"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+      
+      {error && (
+        <div className="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center animate-fade-in">
+          <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {error}
+          <button 
+            onClick={() => setError(null)}
+            className="ml-3 text-white opacity-70 hover:opacity-100"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
       )}
 
@@ -198,11 +265,22 @@ const DashboardPage = () => {
         isDeleting={isDeleting}
       />
 
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
+      {/* Header */}<header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-            <h1 className="text-3xl font-bold text-gray-800">Dashboard Admin</h1>
+            <div className="flex items-center">
+              <h1 className="text-3xl font-bold text-gray-800">Dashboard Admin</h1>
+              <button
+                onClick={exportToCSV}
+                className="ml-4 px-3 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 flex items-center text-sm action-button"
+                title="Ekspor data acara ke CSV"
+              >
+                <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Ekspor CSV
+              </button>
+            </div>
             
             {/* Search & Filter */}
             <div className="flex items-center space-x-4 w-full sm:w-auto">
@@ -227,7 +305,9 @@ const DashboardPage = () => {
               >
                 <option value="date">Tanggal</option>
                 <option value="name">Nama</option>
-              </select>{/* View Toggle */}
+              </select>
+              
+              {/* View Toggle */}
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setView('list')}
@@ -248,10 +328,11 @@ const DashboardPage = () => {
                   </svg>
                 </button>
               </div>
-            </div>
-          </div>
+            </div></div>
         </div>
-      </header>{/* Main Content */}
+      </header>
+
+      {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats */}
         <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -317,10 +398,11 @@ const DashboardPage = () => {
             <div className="flex flex-col items-center justify-center h-full text-gray-600 group-hover:text-blue-500">
               <svg className="h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              <span className="font-medium">Buat Acara Baru</span>
+              </svg><span className="font-medium">Buat Acara Baru</span>
             </div>
-          </Link>{/* Event Cards */}
+          </Link>
+
+          {/* Event Cards */}
           {filteredEvents.length === 0 && !loading ? (
             <div className="col-span-full">
               <div className="text-center py-12">
@@ -346,9 +428,8 @@ const DashboardPage = () => {
             filteredEvents.map(event => {
               const isEventPast = new Date(event.event_date) < new Date();
               
-              return (
-                <div key={event.id} 
-                  className={`bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200 ${
+              return (<div key={event.id} 
+                  className={`bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200 event-card ${
                     view === 'list' ? 'flex items-center justify-between p-4' : ''
                   } ${isEventPast ? 'opacity-75' : ''}`}
                 >
@@ -369,12 +450,11 @@ const DashboardPage = () => {
                         day: 'numeric'
                       })}
                     </p>
-                    <div className={`flex space-x-2 ${view === 'list' ? 'justify-end' : ''}`}>
-                      <a
+                    <div className={`flex space-x-2 ${view === 'list' ? 'justify-end' : ''}`}><a
                         href={`/event/${event.slug}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 py-2 bg-blue-500 text-white text-center rounded hover:bg-blue-600 transition-colors text-sm"
+                        className="px-3 py-2 bg-blue-500 text-white text-center rounded hover:bg-blue-600 transition-colors text-sm action-button"
                         title="Lihat halaman acara"
                       >
                         <svg className="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -382,20 +462,18 @@ const DashboardPage = () => {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                         Lihat
-                      </a>
-                      <Link
+                      </a><Link
                         to={`/admin/event/${event.slug}`}
-                        className="px-3 py-2 bg-green-500 text-white text-center rounded hover:bg-green-600 transition-colors text-sm"
+                        className="px-3 py-2 bg-green-500 text-white text-center rounded hover:bg-green-600 transition-colors text-sm action-button"
                         title="Kelola acara"
                       >
                         <svg className="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                         Kelola
-                      </Link>
-                      <button
+                      </Link><button
                         onClick={() => openDeleteModal(event.id, event.name)}
-                        className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors text-sm"
+                        className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors text-sm action-button"
                         title="Hapus acara"
                       >
                         <svg className="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
