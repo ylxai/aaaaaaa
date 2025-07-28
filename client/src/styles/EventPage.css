@@ -1,0 +1,600 @@
+/* Masonry Grid Styles untuk 4 kolom mobile */
+.my-masonry-grid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: -8px; /* Smaller gutter for 4 column mobile layout */
+  width: auto;
+}
+
+.my-masonry-grid_column {
+  padding-left: 8px; /* Smaller gutter for 4 column mobile layout */
+  background-clip: padding-box;
+}
+
+/* Responsive gutter sizes */
+@media (min-width: 640px) {
+  .my-masonry-grid {
+    margin-left: -12px;
+  }
+  
+  .my-masonry-grid_column {
+    padding-left: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .my-masonry-grid {
+    margin-left: -16px;
+  }
+  
+  .my-masonry-grid_column {
+    padding-left: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .my-masonry-grid {
+    margin-left: -20px;
+  }
+  
+  .my-masonry-grid_column {
+    padding-left: 20px;
+  }
+}
+
+/* Modern card styling dengan spacing yang lebih kecil untuk mobile */
+.my-masonry-grid_column > div {
+  margin-bottom: 8px; /* Smaller gap for 4 column layout */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 640px) {
+  .my-masonry-grid_column > div {
+    margin-bottom: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .my-masonry-grid_column > div {
+    margin-bottom: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .my-masonry-grid_column > div {
+    margin-bottom: 20px;
+  }
+}
+
+/* Modern animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(147, 51, 234, 0.6), 0 0 80px rgba(147, 51, 234, 0.3);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-slide-in-bottom {
+  animation: slideInFromBottom 0.8s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Modern scrollbar dengan glassmorphism */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  backdrop-filter: blur(10px);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.8), rgba(236, 72, 153, 0.8));
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 1), rgba(236, 72, 153, 1));
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+}
+
+/* Modern selection styling */
+::selection {
+  background: rgba(147, 51, 234, 0.3);
+  color: white;
+}
+
+::-moz-selection {
+  background: rgba(147, 51, 234, 0.3);
+  color: white;
+}
+
+/* Signature font dengan fallback */
+.font-signature {
+  font-family: 'Great Vibes', 'Dancing Script', 'Brush Script MT', cursive;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Modern button styles */
+.btn-modern {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-modern:hover::before {
+  left: 100%;
+}
+
+/* Glass card effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Hover glow effect */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 30px rgba(147, 51, 234, 0.4), 0 0 60px rgba(147, 51, 234, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Loading skeleton */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Dark mode skeleton */
+.skeleton-dark {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .mobile-optimized {
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  /* Larger touch targets */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improved tap highlights */
+  .tap-highlight {
+    -webkit-tap-highlight-color: rgba(147, 51, 234, 0.2);
+  }
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+  .high-dpi-optimized {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}/* Focus styles untuk accessibility */
+.focus-visible:focus-visible {
+  outline: 2px solid rgba(147, 51, 234, 0.8);
+  outline-offset: 2px;
+}
+
+/* Custom properties untuk theming */
+:root {
+  --primary-purple: #9333ea;
+  --primary-pink: #ec4899;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);--shadow-glow: 0 0 30px rgba(147, 51, 234, 0.4);
+}/* Lightbox styles tanpa navigasi slide */
+.yarl__container {
+  backdrop-filter: blur(10px) !important;
+  z-index: 1000 !important;
+}
+
+.yarl__button {
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
+}
+
+.yarl__button:hover {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Hide navigation arrows since we removed slide functionality */
+.yarl__navigation_prev,
+.yarl__navigation_next {
+  display: none !important;
+}
+
+/* Only show close button */
+.yarl__button_close {
+  z-index: 1020 !important;
+  top: 20px !important;
+  right: 20px !important;
+  width: 50px !important;
+  height: 50px !important;
+}/* Lightbox slide customization tanpa navigasi dan zoom */
+.yarl__slide {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+.yarl__slide img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  pointer-events: none !important;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Prevent zoom on double tap */
+.yarl__slide img,
+.yarl__slide_wrapper {
+  touch-action: manipulation !important;
+}
+
+/* Remove navigation touch actions */
+.yarl__slide_wrapper {
+  pointer-events: auto !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}/* Prevent body zoom when lightbox is open */
+.yarl__container {
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+/* Global zoom prevention */
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection for inputs and text areas */
+input, textarea, [contenteditable] {
+  -webkit-user-select: text !important;
+  -khtml-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;  
+  user-select: text !important;
+}
+
+/* Prevent pinch zoom on mobile */
+html {
+  touch-action: pan-x pan-y;
+  -ms-touch-action: pan-x pan-y;
+}
+
+/* Specific lightbox zoom prevention */
+.yarl__container,
+.yarl__container * {
+  touch-action: manipulation !important;
+  -webkit-touch-callout: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Override any zoom behavior in lightbox */
+.yarl__slide {
+  zoom: 1 !important;
+  -webkit-transform: scale(1) !important;
+  transform: scale(1) !important;
+}
+
+/* Ensure ESC key works */
+.yarl__container:focus {
+  outline: none !important;
+}
+
+/* Custom overlay button styling */
+.lightbox-overlay-button {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
+  min-height: 44px !important;
+  min-width: 44px !important;
+}
+
+.lightbox-overlay-button:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  transform: scale(1.05) !important;
+}
+
+.lightbox-overlay-button:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* Responsive lightbox controls */
+@media (max-width: 768px) {
+  .lightbox-overlay-button {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+  
+  .lightbox-overlay-button svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+}/* Overlay controls positioning */
+.yarl__slide .absolute {
+  pointer-events: none;
+}
+
+.yarl__slide .pointer-events-auto {
+  pointer-events: auto;
+}
+
+/* Close button positioning */
+.yarl__button_close {
+  z-index: 1020 !important;
+  top: 20px !important;
+  right: 20px !important;
+}
+
+/* Photo grid optimizations untuk 2 kolom mobile */
+@media (max-width: 640px) {
+  .my-masonry-grid_column img {
+    border-radius: 10px; /* Larger border radius for 2-column layout */
+  }
+  
+  /* Larger like counter for mobile 2-column layout */
+  .my-masonry-grid_column .absolute.top-3.right-3 {
+    top: 2px !important;
+    right: 2px !important;
+  }
+  
+  .my-masonry-grid_column .absolute.top-3.right-3 > div {
+    padding: 4px 6px !important;
+    font-size: 12px !important;
+  }
+  
+  .my-masonry-grid_column .absolute.top-3.right-3 svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Orientation tag styles */
+.orientation-tag {
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.orientation-tag:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Tag animations */
+@keyframes tagFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tag-fade-in {
+  animation: tagFadeIn 0.3s ease-out;
+}/* Mobile optimizations for tags */
+@media (max-width: 640px) {
+  .orientation-tag {
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+  }
+  
+  .orientation-tag span {
+    font-size: 8px !important;
+  }
+}
+
+/* Line clamp utilities */.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-line-clamp: 1;
+  display: box;
+  box-orient: vertical;
+  line-clamp: 1;
+  max-height: 1.5em; /* Fallback for non-WebKit browsers */
+  text-overflow: ellipsis;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-line-clamp: 2;
+  display: box;
+  box-orient: vertical;
+  line-clamp: 2;
+  max-height: 3em; /* Fallback for non-WebKit browsers */
+  text-overflow: ellipsis;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-line-clamp: 3;
+  display: box;
+  box-orient: vertical;
+  line-clamp: 3;
+  max-height: 4.5em; /* Fallback for non-WebKit browsers */
+  text-overflow: ellipsis;
+}
+
+/* Message toast styles */
+.message-toast {
+  backdrop-filter: blur(20px);
+  animation: slideInFromLeft 0.5s ease-out;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Progress bar animation */
+.progress-bar {
+  background: linear-gradient(90deg, #9333ea, #ec4899);
+  animation: progressFill 8s linear;
+}
+
+@keyframes progressFill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
